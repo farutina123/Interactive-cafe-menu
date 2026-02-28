@@ -197,8 +197,16 @@ body {
 .dish-name {
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--text);
+}
+
+/* Граммовка — маленький серый текст под названием */
+.dish-weight {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
 }
 
 .dish-desc {

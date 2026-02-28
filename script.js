@@ -22,29 +22,30 @@
 // emoji — используется только в корзине (маленькая иконка рядом с названием).
 const menuItems = [
   // --- Горячие блюда ---
-  { id: 1,  category: "hot",      emoji: "🥩", image: "https://images.unsplash.com/photo-1546964124-0cce460a23c6?auto=format&fit=crop&w=400&h=280", name: "Стейк из свинины",       price: 450, description: "Сочный стейк с гарниром из запечённых овощей" },
-  { id: 2,  category: "hot",      emoji: "🍗", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=400&h=280", name: "Куриная грудка гриль",   price: 320, description: "С соусом из трав, лимоном и рисом" },
-  { id: 3,  category: "hot",      emoji: "🍖", image: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=400&h=280", name: "Котлета по-домашнему",   price: 280, description: "С картофельным пюре и грибным соусом" },
+  // weight — граммовка (г для еды, мл для напитков и супов)
+  { id: 1,  category: "hot",      emoji: "🥩", image: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=400&h=280", name: "Стейк из свинины",       weight: "250 г",  price: 450, description: "Сочный стейк с гарниром из запечённых овощей" },
+  { id: 2,  category: "hot",      emoji: "🍗", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=400&h=280", name: "Куриная грудка гриль",   weight: "200 г",  price: 320, description: "С соусом из трав, лимоном и рисом" },
+  { id: 3,  category: "hot",      emoji: "🍖", image: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=400&h=280", name: "Котлета по-домашнему",   weight: "300 г",  price: 280, description: "С картофельным пюре и грибным соусом" },
 
   // --- Супы ---
-  { id: 4,  category: "soups",    emoji: "🍲", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=400&h=280", name: "Борщ",                   price: 180, description: "Традиционный украинский, со сметаной и хлебом" },
-  { id: 5,  category: "soups",    emoji: "🍄", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=400&h=280", name: "Грибной крем-суп",       price: 220, description: "Из белых грибов со сливками и гренками" },
-  { id: 6,  category: "soups",    emoji: "🍜", image: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=400&h=280", name: "Куриная лапша",          price: 160, description: "На домашнем бульоне с деревенской лапшой" },
+  { id: 4,  category: "soups",    emoji: "🍲", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=400&h=280", name: "Борщ",                   weight: "350 мл", price: 180, description: "Традиционный украинский, со сметаной и хлебом" },
+  { id: 5,  category: "soups",    emoji: "🍄", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=400&h=280", name: "Грибной крем-суп",       weight: "300 мл", price: 220, description: "Из белых грибов со сливками и гренками" },
+  { id: 6,  category: "soups",    emoji: "🍜", image: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=400&h=280", name: "Куриная лапша",          weight: "350 мл", price: 160, description: "На домашнем бульоне с деревенской лапшой" },
 
   // --- Салаты ---
-  { id: 7,  category: "salads",   emoji: "🥗", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&h=280", name: "Цезарь с курицей",       price: 290, description: "Классический с пармезаном, соусом и крутонами" },
-  { id: 8,  category: "salads",   emoji: "🫒", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&h=280", name: "Греческий",              price: 250, description: "Оливки, фета, свежие овощи и оливковое масло" },
-  { id: 9,  category: "salads",   emoji: "🥙", image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=400&h=280", name: "Оливье",                 price: 200, description: "По классическому советскому рецепту" },
+  { id: 7,  category: "salads",   emoji: "🥗", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&h=280", name: "Цезарь с курицей",       weight: "250 г",  price: 290, description: "Классический с пармезаном, соусом и крутонами" },
+  { id: 8,  category: "salads",   emoji: "🫒", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&h=280", name: "Греческий",              weight: "220 г",  price: 250, description: "Оливки, фета, свежие овощи и оливковое масло" },
+  { id: 9,  category: "salads",   emoji: "🥙", image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=400&h=280", name: "Оливье",                 weight: "200 г",  price: 200, description: "По классическому советскому рецепту" },
 
   // --- Десерты ---
-  { id: 10, category: "desserts", emoji: "🍰", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=400&h=280", name: "Тирамису",               price: 280, description: "Итальянский десерт с маскарпоне и кофе" },
-  { id: 11, category: "desserts", emoji: "🎂", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&h=280", name: "Чизкейк Нью-Йорк",      price: 310, description: "Нежный сыр на песочной основе с ягодным соусом" },
-  { id: 12, category: "desserts", emoji: "🥞", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&h=280", name: "Блинчики с вареньем",    price: 190, description: "Тонкие блинчики с домашним клубничным вареньем" },
+  { id: 10, category: "desserts", emoji: "🍰", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=400&h=280", name: "Тирамису",               weight: "150 г",  price: 280, description: "Итальянский десерт с маскарпоне и кофе" },
+  { id: 11, category: "desserts", emoji: "🎂", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&h=280", name: "Чизкейк Нью-Йорк",      weight: "160 г",  price: 310, description: "Нежный сыр на песочной основе с ягодным соусом" },
+  { id: 12, category: "desserts", emoji: "🥞", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&h=280", name: "Блинчики с вареньем",    weight: "200 г",  price: 190, description: "Тонкие блинчики с домашним клубничным вареньем" },
 
   // --- Напитки ---
-  { id: 13, category: "drinks",   emoji: "☕", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&h=280", name: "Кофе американо",         price: 120, description: "Крепкий, свежеобжаренный, без молока" },
-  { id: 14, category: "drinks",   emoji: "🍵", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&h=280", name: "Чай чёрный",             price: 90,  description: "С лимоном и мёдом по желанию" },
-  { id: 15, category: "drinks",   emoji: "🍊", image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=400&h=280", name: "Апельсиновый сок",       price: 180, description: "Свежевыжатый, без сахара и консервантов" },
+  { id: 13, category: "drinks",   emoji: "☕", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&h=280", name: "Кофе американо",         weight: "200 мл", price: 120, description: "Крепкий, свежеобжаренный, без молока" },
+  { id: 14, category: "drinks",   emoji: "🍵", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&h=280", name: "Чай чёрный",             weight: "300 мл", price: 90,  description: "С лимоном и мёдом по желанию" },
+  { id: 15, category: "drinks",   emoji: "🍊", image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=400&h=280", name: "Апельсиновый сок",       weight: "250 мл", price: 180, description: "Свежевыжатый, без сахара и консервантов" },
 ];
 
 // Названия категорий для кнопок-фильтров.
@@ -138,6 +139,7 @@ function renderDishes() {
       <img class="dish-image" src="${item.image}" alt="${item.name}" loading="lazy" />
       <div class="dish-info">
         <h3 class="dish-name">${item.name}</h3>
+        <span class="dish-weight">${item.weight}</span>
         <p class="dish-desc">${item.description}</p>
         <div class="dish-footer">
           <span class="dish-price">${item.price} ₽</span>
