@@ -1,0 +1,303 @@
+// ============================================================
+//  ИНТЕРАКТИВНОЕ МЕНЮ КАФЕ — script.js
+//  Структура файла:
+//    1. Данные меню (добавляй блюда сюда)
+//    2. Состояние приложения (корзина, активная категория)
+//    3. Отрисовка категорий
+//    4. Отрисовка карточек блюд
+//    5. Работа с корзиной (добавить, удалить, изменить кол-во)
+//    6. Обновление интерфейса корзины
+//    7. Запуск приложения
+// ============================================================
+
+
+// ============================================================
+// 1. ДАННЫЕ МЕНЮ
+// Чтобы добавить блюдо — добавь объект в этот массив.
+// Чтобы добавить категорию — добавь её в CATEGORIES ниже.
+// ============================================================
+
+// Список всех блюд
+const menuItems = [
+  // --- Горячие блюда ---
+  { id: 1,  category: "hot",      emoji: "🥩", name: "Стейк из свинины",       price: 450, description: "Сочный стейк с гарниром из запечённых овощей" },
+  { id: 2,  category: "hot",      emoji: "🍗", name: "Куриная грудка гриль",   price: 320, description: "С соусом из трав, лимоном и рисом" },
+  { id: 3,  category: "hot",      emoji: "🍖", name: "Котлета по-домашнему",   price: 280, description: "С картофельным пюре и грибным соусом" },
+
+  // --- Супы ---
+  { id: 4,  category: "soups",    emoji: "🍲", name: "Борщ",                   price: 180, description: "Традиционный украинский, со сметаной и хлебом" },
+  { id: 5,  category: "soups",    emoji: "🍄", name: "Грибной крем-суп",       price: 220, description: "Из белых грибов со сливками и гренками" },
+  { id: 6,  category: "soups",    emoji: "🍜", name: "Куриная лапша",          price: 160, description: "На домашнем бульоне с деревенской лапшой" },
+
+  // --- Салаты ---
+  { id: 7,  category: "salads",   emoji: "🥗", name: "Цезарь с курицей",       price: 290, description: "Классический с пармезаном, соусом и крутонами" },
+  { id: 8,  category: "salads",   emoji: "🫒", name: "Греческий",              price: 250, description: "Оливки, фета, свежие овощи и оливковое масло" },
+  { id: 9,  category: "salads",   emoji: "🥙", name: "Оливье",                 price: 200, description: "По классическому советскому рецепту" },
+
+  // --- Десерты ---
+  { id: 10, category: "desserts", emoji: "🍰", name: "Тирамису",               price: 280, description: "Итальянский десерт с маскарпоне и кофе" },
+  { id: 11, category: "desserts", emoji: "🎂", name: "Чизкейк Нью-Йорк",      price: 310, description: "Нежный сыр на песочной основе с ягодным соусом" },
+  { id: 12, category: "desserts", emoji: "🥞", name: "Блинчики с вареньем",    price: 190, description: "Тонкие блинчики с домашним клубничным вареньем" },
+
+  // --- Напитки ---
+  { id: 13, category: "drinks",   emoji: "☕", name: "Кофе американо",         price: 120, description: "Крепкий, свежеобжаренный, без молока" },
+  { id: 14, category: "drinks",   emoji: "🍵", name: "Чай чёрный",             price: 90,  description: "С лимоном и мёдом по желанию" },
+  { id: 15, category: "drinks",   emoji: "🍊", name: "Апельсиновый сок",       price: 180, description: "Свежевыжатый, без сахара и консервантов" },
+];
+
+// Названия категорий для кнопок-фильтров.
+// Ключ — совпадает с полем category в menuItems, значение — отображаемое имя.
+const CATEGORIES = {
+  all:      "Все",
+  hot:      "Горячие блюда",
+  soups:    "Супы",
+  salads:   "Салаты",
+  desserts: "Десерты",
+  drinks:   "Напитки",
+};
+
+
+// ============================================================
+// 2. СОСТОЯНИЕ ПРИЛОЖЕНИЯ
+// Все данные, которые меняются в процессе работы
+// ============================================================
+
+// Корзина: массив объектов вида { id, name, price, emoji, quantity }
+let cart = [];
+
+// Какая категория сейчас выбрана (ключ из CATEGORIES)
+let activeCategory = "all";
+
+
+// ============================================================
+// 3. ОТРИСОВКА КАТЕГОРИЙ
+// Создаём кнопки-фильтры и вешаем на них обработчики кликов
+// ============================================================
+
+function renderCategories() {
+  const nav = document.getElementById("categories-nav");
+
+  // Для каждого ключа в CATEGORIES создаём кнопку
+  Object.keys(CATEGORIES).forEach(function (key) {
+    const btn = document.createElement("button");
+    btn.className = "category-btn" + (key === activeCategory ? " active" : "");
+    btn.textContent = CATEGORIES[key];
+
+    btn.addEventListener("click", function () {
+      activeCategory = key;
+
+      // Убираем класс active со ВСЕХ кнопок, потом ставим на нажатую
+      document.querySelectorAll(".category-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
+      btn.classList.add("active");
+
+      renderDishes(); // Перерисовываем карточки по новому фильтру
+    });
+
+    nav.appendChild(btn);
+  });
+}
+
+
+// ============================================================
+// 4. ОТРИСОВКА КАРТОЧЕК БЛЮД
+// Фильтруем menuItems по категории и строим HTML карточек
+// ============================================================
+
+function renderDishes() {
+  const grid = document.getElementById("dishes-grid");
+  grid.innerHTML = ""; // Очищаем сетку перед новой отрисовкой
+
+  // Если выбрано "Все" — берём все блюда, иначе фильтруем
+  const visible = activeCategory === "all"
+    ? menuItems
+    : menuItems.filter(function (item) { return item.category === activeCategory; });
+
+  visible.forEach(function (item) {
+    const card = document.createElement("div");
+    card.className = "dish-card";
+
+    // Ищем блюдо в корзине, чтобы понять, что показать:
+    // если блюда нет — кнопку «В корзину»
+    // если есть — счётчик «−  2  +»
+    const inCart = cart.find(function (c) { return c.id === item.id; });
+
+    // Нижняя часть карточки зависит от того, есть ли товар в корзине
+    const footerHTML = inCart
+      ? `<div class="quantity-control">
+           <button class="qty-btn" onclick="changeQuantity(${item.id}, -1)">−</button>
+           <span class="qty-value">${inCart.quantity}</span>
+           <button class="qty-btn" onclick="changeQuantity(${item.id}, +1)">+</button>
+         </div>`
+      : `<button class="add-btn" onclick="addToCart(${item.id})">В корзину</button>`;
+
+    card.innerHTML = `
+      <div class="dish-emoji">${item.emoji}</div>
+      <div class="dish-info">
+        <h3 class="dish-name">${item.name}</h3>
+        <p class="dish-desc">${item.description}</p>
+        <div class="dish-footer">
+          <span class="dish-price">${item.price} ₽</span>
+          ${footerHTML}
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+
+// ============================================================
+// 5. РАБОТА С КОРЗИНОЙ
+// Функции: добавить, изменить количество, удалить
+// ============================================================
+
+// Добавить блюдо в корзину (вызывается из карточки блюда)
+function addToCart(id) {
+  const item = menuItems.find(function (m) { return m.id === id; });
+  if (!item) return; // Защита: если блюдо не найдено — выходим
+
+  const existing = cart.find(function (c) { return c.id === id; });
+
+  if (existing) {
+    // Блюдо уже в корзине — увеличиваем количество
+    existing.quantity += 1;
+  } else {
+    // Новое блюдо — добавляем в корзину с количеством 1
+    // Оператор {...item} копирует все поля объекта item
+    cart.push(Object.assign({}, item, { quantity: 1 }));
+  }
+
+  updateCartUI();
+  renderDishes(); // Перерисовываем карточки — кнопка сменится на счётчик
+}
+
+// Изменить количество товара: delta = +1 (добавить) или -1 (убрать)
+function changeQuantity(id, delta) {
+  const item = cart.find(function (c) { return c.id === id; });
+  if (!item) return;
+
+  item.quantity += delta;
+
+  // Если количество стало 0 или меньше — удаляем товар из корзины
+  if (item.quantity <= 0) {
+    removeFromCart(id);
+    return; // Выходим, иначе updateCartUI вызовется дважды
+  }
+
+  updateCartUI();
+  renderDishes();
+}
+
+// Полностью убрать блюдо из корзины (кнопка ✕ в панели корзины)
+function removeFromCart(id) {
+  // filter возвращает новый массив БЕЗ элемента с этим id
+  cart = cart.filter(function (c) { return c.id !== id; });
+
+  updateCartUI();
+  renderDishes(); // Счётчик на карточке снова сменится на кнопку «В корзину»
+}
+
+
+// ============================================================
+// 6. ОБНОВЛЕНИЕ ИНТЕРФЕЙСА КОРЗИНЫ
+// Пересчитываем сумму, обновляем бейдж и содержимое панели
+// ============================================================
+
+function updateCartUI() {
+  // Подсчёт: сколько единиц товара в корзине (для бейджа)
+  const totalCount = cart.reduce(function (sum, item) {
+    return sum + item.quantity;
+  }, 0);
+
+  // Подсчёт: итоговая сумма
+  const totalPrice = cart.reduce(function (sum, item) {
+    return sum + item.price * item.quantity;
+  }, 0);
+
+  // Обновляем бейдж на кнопке корзины
+  const badge = document.getElementById("cart-count");
+  badge.textContent = totalCount;
+  badge.style.display = totalCount > 0 ? "flex" : "none";
+
+  // Обновляем сумму в панели корзины
+  document.getElementById("cart-total-price").textContent = totalPrice;
+
+  // Перерисовываем список товаров в панели
+  renderCartPanel();
+}
+
+// Отрисовка содержимого панели корзины (список товаров)
+function renderCartPanel() {
+  const list = document.getElementById("cart-items-list");
+
+  if (cart.length === 0) {
+    list.innerHTML = '<p class="cart-empty">Корзина пуста.<br>Добавьте блюда из меню!</p>';
+    return;
+  }
+
+  // Строим HTML для каждого товара в корзине
+  list.innerHTML = cart.map(function (item) {
+    return `
+      <div class="cart-item">
+        <span class="cart-item-emoji">${item.emoji}</span>
+        <div class="cart-item-info">
+          <span class="cart-item-name">${item.name}</span>
+          <span class="cart-item-price">${item.price} ₽ × ${item.quantity} = ${item.price * item.quantity} ₽</span>
+        </div>
+        <button class="remove-btn" onclick="removeFromCart(${item.id})" title="Удалить">✕</button>
+      </div>
+    `;
+  }).join(""); // join("") соединяет массив строк в одну без разделителей
+}
+
+
+// ============================================================
+// 7. ЗАПУСК ПРИЛОЖЕНИЯ
+// Вешаем обработчики на кнопки шапки и запускаем отрисовку
+// ============================================================
+
+// Открыть / закрыть панель корзины
+document.getElementById("cart-btn").addEventListener("click", function () {
+  document.getElementById("cart-modal").classList.add("open");
+});
+
+document.getElementById("close-cart-btn").addEventListener("click", function () {
+  document.getElementById("cart-modal").classList.remove("open");
+});
+
+// Закрыть по клику на затемнённый фон (вне панели)
+document.getElementById("cart-modal").addEventListener("click", function (e) {
+  // e.target — элемент, по которому кликнули
+  // this — сам overlay (фон)
+  // Закрываем только если кликнули по фону, а не по панели
+  if (e.target === this) {
+    this.classList.remove("open");
+  }
+});
+
+// Кнопка «Оформить заказ»
+document.getElementById("order-btn").addEventListener("click", function () {
+  if (cart.length === 0) {
+    alert("Добавьте хотя бы одно блюдо в корзину!");
+    return;
+  }
+
+  const total = cart.reduce(function (sum, item) {
+    return sum + item.price * item.quantity;
+  }, 0);
+
+  alert("Заказ оформлен! 🎉\nСумма: " + total + " ₽\n\nСпасибо, что выбрали нас!");
+
+  // Очищаем корзину после заказа
+  cart = [];
+  updateCartUI();
+  renderDishes();
+  document.getElementById("cart-modal").classList.remove("open");
+});
+
+// --- Запускаем начальную отрисовку страницы ---
+renderCategories();
+renderDishes();
