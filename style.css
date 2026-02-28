@@ -177,13 +177,13 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* Большой эмодзи вместо картинки */
-.dish-emoji {
-  background: linear-gradient(135deg, #fff8f4, #ffeedd);
-  font-size: 64px;
-  text-align: center;
-  padding: 24px 0 18px;
-  line-height: 1;
+/* Фото блюда в карточке */
+.dish-image {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;      /* обрезает фото до нужного размера без искажений */
+  display: block;
+  background: #f0ede9;    /* фон пока фото загружается */
 }
 
 /* Информация о блюде */
