@@ -68,6 +68,9 @@ const CATEGORIES = {
 // Корзина: массив объектов вида { id, name, price, emoji, quantity }
 let cart = [];
 
+// Процент чаевых
+let tipPercent = 10;
+
 // Какая категория сейчас выбрана (ключ из CATEGORIES)
 let activeCategory = "all";
 
@@ -212,19 +215,23 @@ function removeFromCart(id) {
 
 function updateCartUI() {
   // Подсчёт: сколько единиц товара в корзине (для бейджа)
-  const totalCount = cart.reduce(function (sum, item) {
+  const totalItemsCount = cart.reduce(function (sum, item) {
     return sum + item.quantity;
   }, 0);
 
-  // Подсчёт: итоговая сумма
-  const totalPrice = cart.reduce(function (sum, item) {
+  // Подсчёт: сумма товаров
+  const itemsTotal = cart.reduce(function (sum, item) {
     return sum + item.price * item.quantity;
   }, 0);
 
+  // Итоговая сумма с чаевыми
+  const tipAmount = Math.round(itemsTotal * (tipPercent / 100));
+  const totalPrice = itemsTotal + tipAmount;
+
   // Обновляем бейдж на кнопке корзины
   const badge = document.getElementById("cart-count");
-  badge.textContent = totalCount;
-  badge.style.display = totalCount > 0 ? "flex" : "none";
+  badge.textContent = totalItemsCount;
+  badge.style.display = totalItemsCount > 0 ? "flex" : "none";
 
   // Обновляем сумму в панели корзины
   document.getElementById("cart-total-price").textContent = totalPrice;
@@ -289,17 +296,40 @@ document.getElementById("order-btn").addEventListener("click", function () {
     return;
   }
 
-  const total = cart.reduce(function (sum, item) {
+  const itemsTotal = cart.reduce(function (sum, item) {
     return sum + item.price * item.quantity;
   }, 0);
+  const tipAmount = Math.round(itemsTotal * (tipPercent / 100));
+  const total = itemsTotal + tipAmount;
 
-  alert("Заказ оформлен! 🎉\nСумма: " + total + " ₽\n\nСпасибо, что выбрали нас!");
+  let message = "Заказ оформлен! 🎉\n";
+  message += "Сумма блюд: " + itemsTotal + " ₽\n";
+  if (tipAmount > 0) {
+    message += "Чаевые (" + tipPercent + "%): " + tipAmount + " ₽\n";
+  }
+  message += "Итого к оплате: " + total + " ₽\n\n";
+  message += "Спасибо, что выбрали нас!";
+
+  alert(message);
 
   // Очищаем корзину после заказа
   cart = [];
   updateCartUI();
   renderDishes();
   document.getElementById("cart-modal").classList.remove("open");
+});
+
+// Обработка выбора чаевых
+document.getElementById("tips-options").addEventListener("click", function (e) {
+  if (e.target.classList.contains("tip-btn")) {
+    // Убираем активный класс у всех
+    document.querySelectorAll(".tip-btn").forEach(btn => btn.classList.remove("active"));
+    // Добавляем нажатой
+    e.target.classList.add("active");
+    // Обновляем состояние и UI
+    tipPercent = parseInt(e.target.dataset.percent);
+    updateCartUI();
+  }
 });
 
 // --- Запускаем начальную отрисовку страницы ---

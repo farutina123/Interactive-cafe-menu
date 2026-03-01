@@ -435,6 +435,47 @@ body {
   background: #ffb3b3;
 }
 
+/* ===== НИЖНЯЯ ЧАСТЬ КОРЗИНЫ: ЧАЕВЫЕ И ИТОГ ===== */
+.tips-section {
+  margin-bottom: 16px;
+}
+
+.tips-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.tips-options {
+  display: flex;
+  gap: 8px;
+}
+
+.tip-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+
+.tip-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tip-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
 /* Нижняя часть панели: итог + заказ */
 .cart-footer {
   padding: 20px 24px;
