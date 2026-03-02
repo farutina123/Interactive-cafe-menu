@@ -52,9 +52,27 @@
         <p class="cart-empty">Корзина пуста. Добавьте блюда из меню!</p>
       </div>
 
-      <!-- Итоговая сумма и кнопка заказа -->
+      <!-- Итоговая сумма, чаевые и кнопка заказа -->
       <div class="cart-footer">
+        <div class="cart-tips" id="cart-tips-container">
+          <p class="tips-title">Оставить чаевые официанту?</p>
+          <div class="tips-options">
+            <button class="tip-btn" data-percent="0">0%</button>
+            <button class="tip-btn" data-percent="5">5%</button>
+            <button class="tip-btn" data-percent="10">10%</button>
+            <button class="tip-btn" data-percent="15">15%</button>
+            <button class="tip-btn active" data-percent="10">10%</button> <!-- Значение по умолчанию выделим через JS -->
+          </div>
+        </div>
         <div class="cart-total">
+          <span>Сумма заказа:</span>
+          <span><span id="cart-subtotal-price">0</span> ₽</span>
+        </div>
+        <div class="cart-total">
+          <span>Чаевые:</span>
+          <span><span id="cart-tips-amount">0</span> ₽</span>
+        </div>
+        <div class="cart-total main-total">
           <span>Итого:</span>
           <span class="cart-total-price"><span id="cart-total-price">0</span> ₽</span>
         </div>
