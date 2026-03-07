@@ -52,6 +52,7 @@ const CATEGORIES = {
 let cart = [];
 let tipPercent = 10;
 let activeCategory = "all";
+let activeSort = "default"; // "default" | "asc" | "desc"
 
 
 // ============================================================
@@ -79,8 +80,16 @@ function renderCategories() {
 
 
 // ============================================================
-// 4. ОТРИСОВКА КАРТОЧЕК БЛЮД
+// 4. СОРТИРОВКА И ОТРИСОВКА КАРТОЧЕК БЛЮД
 // ============================================================
+
+// Возвращает копию массива, отсортированную по цене,
+// либо исходный массив при activeSort === "default"
+function sortDishes(items) {
+  if (activeSort === "asc")  return [...items].sort((a, b) => a.price - b.price);
+  if (activeSort === "desc") return [...items].sort((a, b) => b.price - a.price);
+  return items;
+}
 
 // Возвращает HTML нижней части карточки: счётчик или кнопку «В корзину»
 function getCardFooterHTML(item, inCart) {
@@ -99,9 +108,11 @@ function renderDishes() {
   const grid = document.getElementById("dishes-grid");
   grid.innerHTML = "";
 
-  const visible = activeCategory === "all"
+  const filtered = activeCategory === "all"
     ? menuItems
     : menuItems.filter(item => item.category === activeCategory);
+
+  const visible = sortDishes(filtered);
 
   visible.forEach(item => {
     const inCart = cart.find(c => c.id === item.id);
@@ -261,6 +272,15 @@ function initEventListeners() {
   // Закрыть по клику на затемнённый фон (вне панели)
   modal.addEventListener("click", e => {
     if (e.target === modal) modal.classList.remove("open");
+  });
+
+  document.querySelectorAll(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      activeSort = this.dataset.sort;
+      document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("sort-btn--active"));
+      this.classList.add("sort-btn--active");
+      renderDishes();
+    });
   });
 
   document.getElementById("order-btn").addEventListener("click", () => {

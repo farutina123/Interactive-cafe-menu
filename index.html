@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Кафе «Уютное» — Меню</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
 
@@ -31,6 +31,14 @@
 
     <!-- Навигация по категориям — кнопки генерируются в script.js -->
     <nav class="categories-nav" id="categories-nav"></nav>
+
+    <!-- Сортировка по цене -->
+    <div class="sort-bar" style="margin: 0 0 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span style="font-size: 0.9rem; color: var(--text-muted, #666);">Сортировка:</span>
+      <button class="sort-btn sort-btn--active" data-sort="default">По умолчанию</button>
+      <button class="sort-btn" data-sort="asc">↑ Дешевле</button>
+      <button class="sort-btn" data-sort="desc">↓ Дороже</button>
+    </div>
 
     <!-- Сетка карточек блюд — карточки генерируются в script.js -->
     <section class="dishes-grid" id="dishes-grid"></section>
@@ -82,7 +90,7 @@
   </div>
 
   <!-- Подключаем скрипт в конце — после загрузки HTML -->
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 
 </body>
 </html>
