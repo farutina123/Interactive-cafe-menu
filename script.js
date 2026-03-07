@@ -289,6 +289,22 @@ function initEventListeners() {
       return;
     }
 
+    const cartIds = cart.map(item => item.id);
+    const availableDesserts = menuItems.filter(
+      item => item.category === "desserts" && !cartIds.includes(item.id)
+    );
+    if (availableDesserts.length > 0) {
+      const suggested = availableDesserts[Math.floor(Math.random() * availableDesserts.length)];
+      const wantDessert = confirm(
+        `🍰 Не забудьте про десерт!\n\n${suggested.emoji} ${suggested.name} — ${suggested.price} ₽\n${suggested.description}\n\nДобавить в заказ?`
+      );
+      if (wantDessert) {
+        cart.push({ ...suggested, quantity: 1 });
+        updateCartUI();
+        renderDishes();
+      }
+    }
+
     const { subtotal, tipsAmount, total } = calcTotals();
 
     let message = "Заказ оформлен! 🎉\n";
