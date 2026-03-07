@@ -52,6 +52,7 @@ const CATEGORIES = {
 let cart = [];
 let tipPercent = 10;
 let activeCategory = "all";
+let sortOrder = "default";
 
 
 // ============================================================
@@ -99,9 +100,15 @@ function renderDishes() {
   const grid = document.getElementById("dishes-grid");
   grid.innerHTML = "";
 
-  const visible = activeCategory === "all"
-    ? menuItems
+  let visible = activeCategory === "all"
+    ? [...menuItems]
     : menuItems.filter(item => item.category === activeCategory);
+
+  if (sortOrder === "asc") {
+    visible.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === "desc") {
+    visible.sort((a, b) => b.price - a.price);
+  }
 
   visible.forEach(item => {
     const inCart = cart.find(c => c.id === item.id);
@@ -290,7 +297,19 @@ function initEventListeners() {
   });
 }
 
+function initSort() {
+  document.querySelectorAll(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      sortOrder = this.dataset.sort;
+      document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      renderDishes();
+    });
+  });
+}
+
 renderCategories();
 renderDishes();
 initTips();
+initSort();
 initEventListeners();
