@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Кафе «Уютное» — Меню</title>
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
 
@@ -89,8 +89,23 @@
     </div>
   </div>
 
+  <!-- ===== МОДАЛЬНОЕ ОКНО ПРЕДЛОЖЕНИЯ ДЕСЕРТА ===== -->
+  <div class="dessert-modal" id="dessert-modal">
+    <div class="dessert-modal-box">
+      <p class="dessert-modal-label">🍰 Не забудьте про десерт!</p>
+      <img class="dessert-modal-img" id="dessert-modal-img" src="" alt="" />
+      <h3 class="dessert-modal-name" id="dessert-modal-name"></h3>
+      <p class="dessert-modal-desc" id="dessert-modal-desc"></p>
+      <p class="dessert-modal-price" id="dessert-modal-price"></p>
+      <div class="dessert-modal-actions">
+        <button class="dessert-add-btn" id="dessert-add-btn">Добавить в корзину</button>
+        <button class="dessert-skip-btn" id="dessert-skip-btn">Нет, спасибо — оформить заказ</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Подключаем скрипт в конце — после загрузки HTML -->
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=3"></script>
 
 </body>
 </html>

@@ -289,25 +289,62 @@ function initEventListeners() {
       return;
     }
 
-    const { subtotal, tipsAmount, total } = calcTotals();
+    // Десерты, которых ещё нет в корзине
+    const cartIds = cart.map(c => c.id);
+    const availableDesserts = menuItems.filter(
+      m => m.category === "desserts" && !cartIds.includes(m.id)
+    );
 
-    let message = "Заказ оформлен! 🎉\n";
-    message += "Сумма блюд: " + subtotal + " ₽\n";
-    if (tipsAmount > 0) {
-      message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
+    if (availableDesserts.length === 0) {
+      // Все десерты уже в корзине — сразу оформляем
+      completeOrder(modal);
+      return;
     }
-    message += "ИТОГО: " + total + " ₽\n\n";
-    message += "Спасибо, что выбрали нас!";
 
-    alert(message);
+    // Выбираем случайный десерт и показываем предложение
+    const suggested = availableDesserts[Math.floor(Math.random() * availableDesserts.length)];
+    const dessertModal = document.getElementById("dessert-modal");
 
-    cart = [];
-    tipPercent = 10;
-    updateTipsButtons();
-    updateCartUI();
-    renderDishes();
-    modal.classList.remove("open");
+    document.getElementById("dessert-modal-img").src = suggested.image;
+    document.getElementById("dessert-modal-img").alt = suggested.name;
+    document.getElementById("dessert-modal-name").textContent = suggested.name;
+    document.getElementById("dessert-modal-desc").textContent = suggested.description;
+    document.getElementById("dessert-modal-price").textContent = suggested.price + " ₽";
+
+    dessertModal.classList.add("open");
+
+    document.getElementById("dessert-add-btn").onclick = () => {
+      addToCart(suggested.id);
+      dessertModal.classList.remove("open");
+      // Корзина остаётся открытой — гость видит обновлённый заказ
+    };
+
+    document.getElementById("dessert-skip-btn").onclick = () => {
+      dessertModal.classList.remove("open");
+      completeOrder(modal);
+    };
   });
+}
+
+function completeOrder(cartModal) {
+  const { subtotal, tipsAmount, total } = calcTotals();
+
+  let message = "Заказ оформлен! 🎉\n";
+  message += "Сумма блюд: " + subtotal + " ₽\n";
+  if (tipsAmount > 0) {
+    message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
+  }
+  message += "ИТОГО: " + total + " ₽\n\n";
+  message += "Спасибо, что выбрали нас!";
+
+  alert(message);
+
+  cart = [];
+  tipPercent = 10;
+  updateTipsButtons();
+  updateCartUI();
+  renderDishes();
+  cartModal.classList.remove("open");
 }
 
 renderCategories();
