@@ -558,6 +558,133 @@ body {
   font-weight: 600;
 }
 
+/* ===== МОДАЛЬНОЕ ОКНО ПРЕДЛОЖЕНИЯ ДЕСЕРТА ===== */
+.dessert-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  padding: 16px;
+}
+
+.dessert-modal.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.dessert-dialog {
+  background: var(--card-bg);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 380px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  transform: scale(0.92) translateY(24px);
+  transition: transform 0.3s ease;
+}
+
+.dessert-modal.open .dessert-dialog {
+  transform: scale(1) translateY(0);
+}
+
+.dessert-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 0;
+}
+
+.dessert-dialog-tag {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.dessert-dialog-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  margin-top: 14px;
+  background: #f0ede9;
+}
+
+.dessert-dialog-body {
+  padding: 16px 20px 4px;
+}
+
+.dessert-dialog-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.dessert-dialog-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.dessert-dialog-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.dessert-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 20px 22px;
+}
+
+.dessert-btn-add {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.dessert-btn-add:hover {
+  background: var(--accent-hover);
+}
+
+.dessert-btn-add:active {
+  transform: scale(0.98);
+}
+
+.dessert-btn-skip {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dessert-btn-skip:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
 /* ===== АДАПТАЦИЯ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ===== */
 @media (max-width: 600px) {
   .header-inner {

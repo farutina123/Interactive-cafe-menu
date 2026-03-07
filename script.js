@@ -256,7 +256,45 @@ function initTips() {
 
 
 // ============================================================
-// 7. ЗАПУСК
+// 7. МОДАЛЬНОЕ ОКНО ПРЕДЛОЖЕНИЯ ДЕСЕРТА
+// ============================================================
+
+function showDessertModal(suggested, onAdd, onSkip) {
+  const modal = document.getElementById("dessert-modal");
+  const img   = document.getElementById("dessert-dialog-img");
+  img.src = suggested.image;
+  img.alt = suggested.name;
+  document.getElementById("dessert-dialog-name").textContent  = `${suggested.emoji} ${suggested.name}`;
+  document.getElementById("dessert-dialog-desc").textContent  = suggested.description;
+  document.getElementById("dessert-dialog-price").textContent = `${suggested.price} ₽`;
+
+  modal.classList.add("open");
+
+  const addBtn   = document.getElementById("dessert-btn-add");
+  const skipBtn  = document.getElementById("dessert-btn-skip");
+  const closeBtn = document.getElementById("close-dessert-btn");
+
+  function cleanup() {
+    modal.classList.remove("open");
+    addBtn.removeEventListener("click", handleAdd);
+    skipBtn.removeEventListener("click", handleSkip);
+    closeBtn.removeEventListener("click", handleSkip);
+    modal.removeEventListener("click", handleOverlay);
+  }
+
+  function handleAdd() { cleanup(); onAdd(); }
+  function handleSkip() { cleanup(); onSkip(); }
+  function handleOverlay(e) { if (e.target === modal) handleSkip(); }
+
+  addBtn.addEventListener("click", handleAdd);
+  skipBtn.addEventListener("click", handleSkip);
+  closeBtn.addEventListener("click", handleSkip);
+  modal.addEventListener("click", handleOverlay);
+}
+
+
+// ============================================================
+// 8. ЗАПУСК
 // ============================================================
 
 function initEventListeners() {
@@ -290,40 +328,43 @@ function initEventListeners() {
       return;
     }
 
+    function placeOrder() {
+      const { subtotal, tipsAmount, total } = calcTotals();
+      let message = "Заказ оформлен! 🎉\n";
+      message += "Сумма блюд: " + subtotal + " ₽\n";
+      if (tipsAmount > 0) {
+        message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
+      }
+      message += "ИТОГО: " + total + " ₽\n\n";
+      message += "Спасибо, что выбрали нас!";
+      alert(message);
+      cart = [];
+      tipPercent = 10;
+      updateTipsButtons();
+      updateCartUI();
+      renderDishes();
+      modal.classList.remove("open");
+    }
+
     const cartIds = cart.map(item => item.id);
     const availableDesserts = menuItems.filter(
       item => item.category === "desserts" && !cartIds.includes(item.id)
     );
+
     if (availableDesserts.length > 0) {
       const suggested = availableDesserts[Math.floor(Math.random() * availableDesserts.length)];
-      const wantDessert = confirm(
-        `🍰 Не забудьте про десерт!\n\n${suggested.emoji} ${suggested.name} — ${suggested.price} ₽\n${suggested.description}\n\nДобавить в заказ?`
+      showDessertModal(
+        suggested,
+        () => {
+          cart.push({ ...suggested, quantity: 1 });
+          updateCartUI();
+          renderDishes();
+        },
+        () => placeOrder()
       );
-      if (wantDessert) {
-        cart.push({ ...suggested, quantity: 1 });
-        updateCartUI();
-        renderDishes();
-      }
+    } else {
+      placeOrder();
     }
-
-    const { subtotal, tipsAmount, total } = calcTotals();
-
-    let message = "Заказ оформлен! 🎉\n";
-    message += "Сумма блюд: " + subtotal + " ₽\n";
-    if (tipsAmount > 0) {
-      message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
-    }
-    message += "ИТОГО: " + total + " ₽\n\n";
-    message += "Спасибо, что выбрали нас!";
-
-    alert(message);
-
-    cart = [];
-    tipPercent = 10;
-    updateTipsButtons();
-    updateCartUI();
-    renderDishes();
-    modal.classList.remove("open");
   });
 }
 
