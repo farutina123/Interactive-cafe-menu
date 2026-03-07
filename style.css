@@ -532,6 +532,32 @@ body {
   transform: scale(0.98);
 }
 
+/* ===== КНОПКИ СОРТИРОВКИ ===== */
+.sort-btn {
+  padding: 7px 16px;
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.sort-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sort-btn--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
 /* ===== АДАПТАЦИЯ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ===== */
 @media (max-width: 600px) {
   .header-inner {
