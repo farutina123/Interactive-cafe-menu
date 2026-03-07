@@ -558,6 +558,71 @@ body {
   font-weight: 600;
 }
 
+/* ===== МОДАЛЬНОЕ ОКНО ПРЕДЛОЖЕНИЯ ДЕСЕРТА ===== */
+
+.dessert-modal {
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+}
+
+.dessert-panel {
+  width: 360px;
+  max-width: 92vw;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.88);
+  transition: transform 0.3s ease;
+}
+
+.dessert-modal.open .dessert-panel {
+  transform: scale(1);
+}
+
+.dessert-body {
+  padding: 0 24px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dessert-body img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.dessert-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dessert-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.dessert-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.dessert-no-btn {
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+.dessert-no-btn:hover {
+  background: var(--border);
+}
+
 /* ===== АДАПТАЦИЯ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ===== */
 @media (max-width: 600px) {
   .header-inner {

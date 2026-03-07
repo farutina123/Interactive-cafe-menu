@@ -294,37 +294,66 @@ function initEventListeners() {
     const availableDesserts = menuItems.filter(
       item => item.category === "desserts" && !cartIds.includes(item.id)
     );
+
     if (availableDesserts.length > 0) {
       const suggested = availableDesserts[Math.floor(Math.random() * availableDesserts.length)];
-      const wantDessert = confirm(
-        `🍰 Не забудьте про десерт!\n\n${suggested.emoji} ${suggested.name} — ${suggested.price} ₽\n${suggested.description}\n\nДобавить в заказ?`
-      );
-      if (wantDessert) {
-        cart.push({ ...suggested, quantity: 1 });
-        updateCartUI();
-        renderDishes();
-      }
+      showDessertModal(suggested, (wantDessert) => {
+        if (wantDessert) {
+          cart.push({ ...suggested, quantity: 1 });
+          updateCartUI();
+          renderDishes();
+          // Возвращаемся в корзину — пользователь видит пересчитанную сумму
+        } else {
+          proceedWithOrder(modal);
+        }
+      });
+    } else {
+      proceedWithOrder(modal);
     }
-
-    const { subtotal, tipsAmount, total } = calcTotals();
-
-    let message = "Заказ оформлен! 🎉\n";
-    message += "Сумма блюд: " + subtotal + " ₽\n";
-    if (tipsAmount > 0) {
-      message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
-    }
-    message += "ИТОГО: " + total + " ₽\n\n";
-    message += "Спасибо, что выбрали нас!";
-
-    alert(message);
-
-    cart = [];
-    tipPercent = 10;
-    updateTipsButtons();
-    updateCartUI();
-    renderDishes();
-    modal.classList.remove("open");
   });
+}
+
+function showDessertModal(suggested, onDecision) {
+  const dessertModal = document.getElementById("dessert-modal");
+
+  document.getElementById("dessert-img").src = suggested.image;
+  document.getElementById("dessert-img").alt = suggested.name;
+  document.getElementById("dessert-name").textContent = suggested.emoji + " " + suggested.name;
+  document.getElementById("dessert-desc").textContent = suggested.description;
+  document.getElementById("dessert-price").textContent = suggested.price + " ₽";
+
+  dessertModal.classList.add("open");
+
+  function close(result) {
+    dessertModal.classList.remove("open");
+    onDecision(result);
+  }
+
+  document.getElementById("dessert-yes-btn").onclick = () => close(true);
+  document.getElementById("dessert-no-btn").onclick  = () => close(false);
+  document.getElementById("close-dessert-btn").onclick = () => close(false);
+  dessertModal.onclick = (e) => { if (e.target === dessertModal) close(false); };
+}
+
+function proceedWithOrder(cartModal) {
+  const { subtotal, tipsAmount, total } = calcTotals();
+
+  let message = "Заказ оформлен! 🎉\n";
+  message += "Сумма блюд: " + subtotal + " ₽\n";
+  if (tipsAmount > 0) {
+    message += "Чаевые (" + tipPercent + "%): " + tipsAmount + " ₽\n";
+  }
+  message += "ИТОГО: " + total + " ₽\n\n";
+  message += "Спасибо, что выбрали нас!";
+
+  alert(message);
+
+  cart = [];
+  tipPercent = 10;
+  updateTipsButtons();
+  updateCartUI();
+  renderDishes();
+  cartModal.classList.remove("open");
 }
 
 renderCategories();
